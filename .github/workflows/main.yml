@@ -48,6 +48,7 @@ jobs:
         env:
           PRIVATE_PYPI_COMMAND: server
           PRIVATE_PYPI_COMMAND_ROOT: /private-pypi-root
+        options: --name private-pypi
 
     steps:
       - uses: actions/checkout@v2
@@ -109,3 +110,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: privatepypi/private-pypi
           tags: ${{ env.PRIVATE_PYPI_VERSION }}
+
+      - name: DEBUG
+        run: docker logs private-pypi

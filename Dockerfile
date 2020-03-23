@@ -1,6 +1,7 @@
 FROM python:3.8-slim-buster
 
 ARG PIP_INDEX_URL
+ARG PIP_TRUSTED_HOST
 
 ADD dist /dist
 

@@ -35,7 +35,7 @@ jobs:
 
   publish:
     needs: [ci]
-    # if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     services:
@@ -108,12 +108,3 @@ jobs:
 
           docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
           docker push privatepypi/private-pypi:$PRIVATE_PYPI_VERSION
-
-      # - name: Publish to Docker Hub.
-      #   uses: docker/build-push-action@v1
-      #   with:
-      #     build_args: PIP_INDEX_URL=http://private-pypi-pkg-repo:${{ secrets.PRIVATE_PYPI_PKG_REPO_TOKEN }}@0.0.0.0:8888/simple/,PIP_TRUSTED_HOST=0.0.0.0,INDEX_MTIME=http://private-pypi-pkg-repo:${{ secrets.PRIVATE_PYPI_PKG_REPO_TOKEN }}@localhost:8888/index_mtime/
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      #     repository: privatepypi/private-pypi
-      #     tags: ${{ env.PRIVATE_PYPI_VERSION }}

@@ -48,6 +48,7 @@ jobs:
         env:
           PRIVATE_PYPI_COMMAND: server
           PRIVATE_PYPI_COMMAND_ROOT: /private-pypi-root
+          PRIVATE_PYPI_COMMAND_DEBUG: True
         options: --name private-pypi
 
     steps:
@@ -112,4 +113,5 @@ jobs:
           tags: ${{ env.PRIVATE_PYPI_VERSION }}
 
       - name: DEBUG
+        if: true
         run: docker logs private-pypi

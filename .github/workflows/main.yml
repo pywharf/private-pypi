@@ -103,7 +103,7 @@ jobs:
       - name: Publish to Docker Hub.
         uses: docker/build-push-action@v1
         with:
-          build_args: PIP_INDEX_URL=http://private-pypi:8888/simple/ PIP_TRUSTED_HOST=private-pypi
+          build_args: PIP_INDEX_URL=http://private-pypi:8888/simple/,PIP_TRUSTED_HOST=private-pypi
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: privatepypi/private-pypi

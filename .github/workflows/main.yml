@@ -113,5 +113,5 @@ jobs:
           tags: ${{ env.PRIVATE_PYPI_VERSION }}
 
       - name: DEBUG
-        if: true
+        if: ${{ true }}
         run: docker logs private-pypi

@@ -1,6 +1,6 @@
 <div align="center">
 
-![logo-large 72ad8bf1](https://user-images.githubusercontent.com/5213906/77393487-14f22b00-6dd8-11ea-9740-fbb290a51f86.png)
+![logo-large 72ad8bf1](https://user-images.githubusercontent.com/5213906/77421237-6d402180-6e06-11ea-89c1-915cd747660a.png)
 
 # Private PyPI
 
@@ -13,14 +13,25 @@
 
 ## What is it?
 
-`private-pypi` allows you to deploy a PyPI server privately and keep your artifacts safe by leveraging the power (confidentiality, integrity and availability) of your backend storage. The backend mechanism is designed to be flexible so that the developer could attach to new backend storage at low cost.
+`private-pypi` allows you to deploy a PyPI server privately and keep your artifacts safe by leveraging the power (confidentiality, integrity and availability) of your storage backend. The backend mechanism is designed to be flexible so that the developer could attach to new storage backend at low cost.
 
-The following backends are supported:
+Supported backends:
 
 - GitHub. (Yes, you can now host your Python package in GitHub by using `private-pypi`. )
 - File system.
 
 ## Architecture
+
+<div align="center">
+
+![](https://user-images.githubusercontent.com/5213906/77424853-c14e0480-6e0c-11ea-9a7f-879a68ada0a0.png)
+
+</div>
+
+The `private-pypi server` serves as an abstraction layer between Python package management tools (pip/poetry/twine) and the storage backends:
+
+* Package management tools communicate with `private-pypi server`, following [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/) for searching/downloading package, and [Legacy API](https://warehouse.pypa.io/api-reference/legacy/#upload-api) for uploading package.
+* `private-pypi server`  then performs file search/download/upload operations with some specific storage backend. Backend-specific operations are encapsulated in the standard backend interfaces, in order to minimize the cost of adding new backends.
 
 ## Usage
 

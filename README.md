@@ -2,7 +2,7 @@
 
 # Private PyPI
 
-![build-and-push](https://github.com/private-pypi/private-pypi/workflows/build-and-push/badge.svg)
+[![build-and-push](https://github.com/private-pypi/private-pypi/workflows/build-and-push/badge.svg)](https://github.com/private-pypi/private-pypi/actions?query=workflow%3Abuild-and-push)
 
 </div>
 

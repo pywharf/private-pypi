@@ -29,24 +29,52 @@ Supported backends:
 
 </div>
 
-The `private-pypi server` serves as an abstraction layer between Python package management tools (pip/poetry/twine) and the storage backends:
+The `private-pypi` server serves as an abstraction layer between Python package management tools (pip/poetry/twine) and the storage backends:
 
-* Package management tools communicate with `private-pypi server`, following [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/) for searching/downloading package, and [Legacy API](https://warehouse.pypa.io/api-reference/legacy/#upload-api) for uploading package.
-* `private-pypi server`  then performs file search/download/upload operations with some specific storage backend. The backend-specific operations are implemented in the standard backend interfaces in order to minimize the cost of supporting new backends.
+* Package management tools communicate with `private-pypi` server, following [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/) for searching/downloading package, and [Legacy API](https://warehouse.pypa.io/api-reference/legacy/#upload-api) for uploading package.
+* `private-pypi server`  then performs file search/download/upload operations with some specific storage backend.
 
 ## Usage
 
-### Install
+### Install from PyPI
 
+```shell
+pip install private-pypi==0.1.0a17
 ```
-pip install private-pypi
+
+This should bring the execuable `private_pypi` to your environment.
+
+```shell
+$ private_pypi --help
+SYNOPSIS
+    private_pypi <command> <command_flags>
+
+SUPPORTED COMMANDS
+    server
+    update_index
+    github.init_pkg_repo
+    github.gen_gh_pages
 ```
 
-This should bring the execuable `private-pypi` to your environment.
+### Using the docker image (recommended)
 
-### `private-pypi server`
+Docker image: `privatepypi/private-pypi:0.1.0a17`. The image tag is the same as the package version in PyPI.
 
-Run the private-pypi server.
+```shell
+$ docker run --rm privatepypi/private-pypi:0.1.0a17 --help
+SYNOPSIS
+    private_pypi <command> <command_flags>
+
+SUPPORTED COMMANDS
+    server
+    update_index
+    github.init_pkg_repo
+    github.gen_gh_pages
+```
+
+### Run the server
+
+To run the server, use the command `private_pypi server`.
 
 ```txt
 SYNOPSIS
@@ -54,15 +82,16 @@ SYNOPSIS
 
 POSITIONAL ARGUMENTS
     ROOT (str):
-        Path to the root folder.
+        Path to the root folder. This folder is for logging,
+        file-based lock and any other file I/O.
 
 FLAGS
     --config (Optional[str]):
-        Path to the package repository config,
+        Path to the package repository config (TOML),
         or the file content if --config_or_admin_secret_can_be_text is set.
         Defaults to None.
     --admin_secret (Optional[str]):
-        Path to the admin secrets config with read/write permission.
+        Path to the admin secrets config (TOML) with read/write permission.
         or the file content if --config_or_admin_secret_can_be_text is set.
         This field is required for local index synchronization.
         Defaults to None.
@@ -94,13 +123,17 @@ FLAGS
         Defaults to {}.
 ```
 
+The configuration files passed to`--config` and `--admin_secret` is specific to the storage backend and hence will be explained in the *Backends* section.
 
+### Server API
 
-### Using the docker image
+#### Authentication in package management tools
 
-Image: `privatepypi/private-pypi`
+#### Authentication in browser
 
+#### PEP-503, Legacy API  
 
+#### Private PyPI server management
 
 ## Backends
 

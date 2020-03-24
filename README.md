@@ -123,11 +123,13 @@ FLAGS
         Defaults to {}.
 ```
 
-The configuration files passed to`--config` and `--admin_secret` is specific to the storage backend and hence will be explained in the *Backends* section.
+In short, the configuration passed to `--config` defines mappings from `pkg_repo_name` to backend-specific settings. In other words, a single server instance can be configured to connect to multiple backends.
 
 ### Server API
 
-#### Authentication in package management tools
+#### Authentication in shell
+
+User must provide the `pkg_repo_name` and their secret in most of the API calls so that the server can find which backend to operate and determine whether the operation is permitted or not. The `pkg_repo_name` and the secret should be provided in [basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication).
 
 #### Authentication in browser
 

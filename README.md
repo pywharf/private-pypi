@@ -191,7 +191,7 @@ $ curl \
 Index file is used to track all published packages in a specific time:
 
 * *Remote index file*: the index file sotred in the backend. By design, this file is only updated by a standalone `update index` service and will not be updated by the `private-pypi` server.
-* *Local index file*: the index file synchronized by the `private-pypi` server from the remote index file.
+* *Local index file*: the index file synchronized from the remote index file by the `private-pypi` server 
 
 To update the remote index file, use the command `private_pypi update_index`:
 
@@ -215,7 +215,7 @@ FLAGS
         Any other backend-specific configs are allowed.
 ```
 
-Backend developer could setup an `update index` service on top of the  `private_pypi update_index` command invocation.
+Backend developer could setup an `update index` service by invoking  `private_pypi update_index` command.
 
 ### Backend-specific commands
 

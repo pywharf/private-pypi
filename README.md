@@ -131,6 +131,15 @@ In short, the configuration passed to `--config` defines mappings from `pkg_repo
 
 User must provide the `pkg_repo_name` and their secret in most of the API calls so that the server can find which backend to operate and determine whether the operation is permitted or not. The `pkg_repo_name` and the secret should be provided in [basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication).
 
+Some package management tools will handle the authentication behind the screen, for example,
+
+* Twine: to set the environment variables `TWINE_USERNAME` and `TWINE_PASSWORD`. [ref](https://github.com/pypa/twine#environment-variables)
+* Poetry: [Configuring credentials](https://python-poetry.org/docs/repositories/#configuring-credentials).
+
+Some will not, for example,
+
+* Pip: you need to prepend  `<pkg_repo_name>:<secret>@` to the hostname in the URL manually like this `https://[username[:password]@]pypi.company.com/simple`. [ref](https://pip.pypa.io/en/stable/user_guide/#basic-authentication-credentials)
+
 #### Authentication in browser
 
 You need to visit `/login` page to submit `pkg_repo_name` and the secret, since most of the browsers today don't support prepending `<username>:<password>@` to the hostname in the URL. The `pkg_repo_name` and the secret will be stored in the session cookies. To reset, visit `/logout` .
@@ -144,6 +153,15 @@ Example: `http://localhost:8888/login/`
 </div>
 
 #### PEP-503, Legacy API
+
+The server follows [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/) and [Legacy API](https://warehouse.pypa.io/api-reference/legacy/#upload-api) to define APIs for searching/downloading/uploading package:
+
+* `GET /simple/`: List all distributions.
+* `GET /simple/<distrib>/`: List all packages in a distribution.
+* `GET /simple/<distrib>/<filename>`: Download a package file. 
+* `POST /simple/`: Upload a package file.
+
+In a nutshell, you need to set the "index url / repository url / ..." to `http://<host>:<port>/simple/` for the package management tool.
 
 #### Private PyPI server management
 

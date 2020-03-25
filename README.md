@@ -164,6 +164,21 @@ type = "file_system"
 raw = "foo"
 ```
 
+Example run:
+
+```shell
+docker run --rm \
+		-v /path/to/root:/private-pypi-root \
+		-v /path/to/config.toml:/config.toml \
+		-v /path/to/admin_secret.toml:/admin_secret.toml \
+		-p 8888:8888 \
+		privatepypi/private-pypi:0.1.0a17 \
+		server \
+		/private-pypi-root \
+		--config=/config.toml \
+		--admin_secret=/admin_secret.toml
+```
+
 ### Server API
 
 #### Authentication in shell
@@ -385,7 +400,29 @@ Afterward, set `http://localhost:8888/simple/` as the repository url, and you ar
 
 #### Introduction
 
+You can configure this backend to host the packages in the local file system.
+
 #### Configuration and secret
+
+Package repository configuration of GitHub backend:
+
+- `type`: must set to `file_system`.
+- `read_secret`: defines the secret with read only permission.
+- `write_secret`: defines the secret with write permission.
+- `max_file_bytes` (optional): limit the maximum size (in bytes) of package. Default to `5368709119` (5 GB).
+- `sync_index_interval` (optional): the sleep time interval (in seconds) before taking the next local index file synchronization. Default to `60`.
+
+Example configuration:
+
+```toml
+[local-file-system]
+type = "file_system"
+read_secret = "foo"
+write_secret = "bar"
+```
+
+To use the API, user must provide either `read_secret` or `write_secret`.
 
 #### Initialize the package repository
 
+A folder will be created automatically to store the packages, with the path `<ROOT>/cache/<pkg_repo_name>/storage`.

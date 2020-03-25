@@ -165,6 +165,32 @@ In a nutshell, you need to set the "index url / repository url / ..." to `http:/
 
 #### Private PyPI server management
 
+##### `GET /index_mtime`
+
+Get the last index index synchronization timestamp.
+
+```shell
+$ curl http://debug:foo@localhost:8888/index_mtime/
+1584379892
+```
+
+##### `POST /initialize`
+
+Submit configuration and (re-)initialize the server. WIth this API, user can change the package repository configuration on-the-fly.
+
+```shell
+# POST the file content.
+$ curl \
+  -d "config=${CONFIG}&admin_secret=${ADMIN_SECRET}" \
+  -X POST \
+  http://localhost:8888/initialize/
+# POST the file.
+$ curl \
+  -F 'config=@/path/to/config.toml' \
+  -F 'admin_secret=@/path/to/admin_secret.toml' \
+  http://localhost:8888/initialize/
+```
+
 ## Backends
 
 ### GitHub

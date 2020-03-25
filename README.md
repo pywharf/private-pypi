@@ -11,6 +11,23 @@
 
 </div>
 
+* [Private PyPI](#Private-PyPI)
+	* [What is it?](#What-is-it?)
+	* [Design](#Design)
+	* [Usage](#Usage)
+		* [Install from PyPI](#Install-from-PyPI)
+		* [Using the docker image (recommended)](#Using-the-docker-image-(recommended))
+		* [Run the server](#Run-the-server)
+		* [Server API](#Server-API)
+		* [Update index](#Update-index)
+		* [Backend-specific commands](#Backend-specific-commands)
+		* [Environment mode](#Environment-mode)
+	* [Backends](#Backends)
+		* [GitHub](#GitHub)
+		* [File system](#File-system)
+
+------
+
 ## What is it?
 
 `private-pypi` allows you to deploy a PyPI server privately and keep your artifacts safe by leveraging the power (confidentiality, integrity and availability) of your storage backend. The backend mechanism is designed to be flexible so that the developer could support a new storage backend at a low cost.
@@ -275,7 +292,7 @@ The format:
 
 #### Introduction
 
-`private-pypi` provides tools to help you setup a new GitHub repository to host your package. You package will be published as repository release and secured by personal access token. Take https://github.com/private-pypi/private-pypi-pkg-repo and https://private-pypi.github.io/private-pypi-pkg-repo/ as an example.
+`private-pypi` will help you setup a new GitHub repository to host your package. You package will be published as repository release and secured by personal access token. Take https://github.com/private-pypi/private-pypi-pkg-repo and https://private-pypi.github.io/private-pypi-pkg-repo/ as an example.
 
 #### Configuration and secret
 

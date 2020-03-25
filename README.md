@@ -233,8 +233,14 @@ SUPPORTED COMMANDS
     github.gen_gh_pages
 ```
 
-
 ### Environment mode
+
+If no argument is passed, `private_pypi` will try to load the arguments from the environment variables. This mode would be helpful if passing argument in shell is not possible.
+
+The format:
+
+- `PRIVATE_PYPI_COMMAND`: to set `<command>`.
+- `PRIVATE_PYPI_COMMAND_<FLAG>`: to set the flag of `<command>`.
 
 ## Backends
 

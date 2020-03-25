@@ -28,7 +28,7 @@ Supported backends:
 The `private-pypi` server serves as an abstraction layer between Python package management tools (pip/poetry/twine) and the storage backends:
 
 * Package management tools communicate with `private-pypi` server, following [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/) for searching/downloading package, and [Legacy API](https://warehouse.pypa.io/api-reference/legacy/#upload-api) for uploading package.
-* `private-pypi server`  then performs file search/download/upload operations with some specific storage backend.
+* `private-pypi` server  then performs file search/download/upload operations with some specific storage backend.
 
 ## Usage
 

@@ -121,6 +121,32 @@ FLAGS
 
 In short, the configuration passed to `--config` defines mappings from `pkg_repo_name` to backend-specific settings. In other words, a single server instance can be configured to connect to multiple backends.
 
+Exampe of the configuration file passed to `--config`:
+
+```toml
+[private-pypi-pkg-repo]
+type = "github"
+owner = "private-pypi"
+repo = "private-pypi-pkg-repo"
+
+[local-file-system]
+type = "file_system"
+read_secret = "foo"
+write_secret = "bar"
+```
+
+Exampe of the admin secret file passed to `--admin_secret`:
+
+```toml
+[private-pypi-pkg-repo]
+type = "github"
+raw = "<personal-access-token>"
+
+[local-file-system]
+type = "file_system"
+raw = "foo"
+```
+
 ### Server API
 
 #### Authentication in shell
@@ -174,14 +200,15 @@ Submit configuration and (re-)initialize the server. User can change the package
 ```shell
 # POST the file content.
 $ curl \
-  -d "config=${CONFIG}&admin_secret=${ADMIN_SECRET}" \
-  -X POST \
-  http://localhost:8888/initialize/
-# POST the file.
+    -d "config=${CONFIG}&admin_secret=${ADMIN_SECRET}" \
+    -X POST \
+    http://localhost:8888/initialize/
+
+# Or, POST the file.
 $ curl \
-  -F 'config=@/path/to/config.toml' \
-  -F 'admin_secret=@/path/to/admin_secret.toml' \
-  http://localhost:8888/initialize/
+    -F 'config=@/path/to/config.toml' \
+    -F 'admin_secret=@/path/to/admin_secret.toml' \
+    http://localhost:8888/initialize/
 ```
 
 ### Update index
@@ -252,7 +279,7 @@ The format:
 
 #### Configuration and secret
 
-Package repository configuration:
+Package repository configuration of GitHub backend:
 
 - `type`: must set to `github`.
 - `owner`: repository owner.
@@ -260,7 +287,7 @@ Package repository configuration:
 - `branch` (optional): the branch to store the remote index file. Default to `master`.
 - `index_filename` (optional): the name of remote index file. Default to `index.toml`.
 - `max_file_bytes` (optional): limit the maximum size (in bytes) of package. Default to `2147483647` since *each file included in a release must be under 2 GB*, [as restricted by GitHub](https://help.github.com/en/github/administering-a-repository/about-releases#storage-and-bandwidth-quotas) .
-- `sync_index_interval` (optional): the time interval (in seconds) to perform local index file synchronization. Default to `60`.
+- `sync_index_interval` (optional): the sleep time interval (in seconds) before taking the next local index file synchronization. Default to `60`.
 
 Example configuration of https://github.com/private-pypi/private-pypi-pkg-repo:
 
@@ -271,11 +298,71 @@ owner = "private-pypi"
 repo = "private-pypi-pkg-repo"
 ```
 
+The GitHub backend accepts [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) as the repository secret. The `private-pypi` server calls GitHub API with PAT to operate on packages. You can authorize user with read or write permission based on [team role](https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization).
 
+#### Initialize the repository
 
-#### Initialize the package repository
+To initialize a GitHub repository as the storage backend, run the command `github.init_pkg_repo`:
+
+```shell
+docker run --rm privatepypi/private-pypi:0.1.0a17 \
+    github.init_pkg_repo \
+    --name private-pypi-pkg-repo \
+    --owner private-pypi \
+    --repo private-pypi-pkg-repo \
+    --token <personal-access-token>
+```
+
+This will:
+
+- Create a new repository `<owner>/<repo>`.
+- Setup the GitHub workflow to update the remote index file if new package is published.
+- Print the configuration for you.
+
+If you want to host the index in GitHub page, like https://private-pypi.github.io/private-pypi-pkg-repo/, add `--enable_gh_pages` to command execution.
 
 #### GitHub workflow integration
+
+To use `private-pypi` with GitHub workflow, take [thie main.yml](https://github.com/private-pypi/private-pypi/blob/master/.github/workflows/main.yml) as an example.
+
+Firstly, run the server as job service:
+
+```yaml
+services:
+  private-pypi:
+    image: privatepypi/private-pypi:0.1.0a17
+    ports:
+      - 8888:8888
+    volumes:
+      - private-pypi-root:/private-pypi-root
+    env:
+      PRIVATE_PYPI_COMMAND: server
+      PRIVATE_PYPI_COMMAND_ROOT: /private-pypi-root
+```
+
+Secondly, initialize the server with configuration and admin secret (Note: remember to [add the admin secret to your repository](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) before using it):
+
+```yaml
+steps:
+  - name: Setup private-pypi
+  run: |
+    curl \
+        -d "config=${CONFIG}&admin_secret=${ADMIN_SECRET}" \
+        -X POST \
+        http://localhost:8888/initialize/
+  env:
+    CONFIG: |
+      [private-pypi-pkg-repo]
+      type = "github"
+      owner = "private-pypi"
+      repo = "private-pypi-pkg-repo"
+    ADMIN_SECRET: |
+      [private-pypi-pkg-repo]
+      type = "github"
+      raw = "${{ secrets.PRIVATE_PYPI_PKG_REPO_TOKEN }}"
+```
+
+Afterward, set `http://localhost:8888/simple/` as the repository url, and you are good to go.
 
 ### File system
 

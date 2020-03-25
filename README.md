@@ -133,7 +133,17 @@ User must provide the `pkg_repo_name` and their secret in most of the API calls 
 
 #### Authentication in browser
 
-#### PEP-503, Legacy API  
+You need to visit `/login` page to submit `pkg_repo_name` and the secret, since most of the browsers today don't support prepending `<username>:<password>@` to the hostname in the URL. The `pkg_repo_name` and the secret will be stored in the session cookies. To reset, visit `/logout` .
+
+Example: `http://localhost:8888/login/`
+
+<div align="center">
+
+![](https://user-images.githubusercontent.com/5213906/77502233-40871b00-6e95-11ea-8ac9-4844d7067ed2.png)
+
+</div>
+
+#### PEP-503, Legacy API
 
 #### Private PyPI server management
 

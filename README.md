@@ -139,7 +139,7 @@ Example: `http://localhost:8888/login/`
 
 <div align="center">
 
-![](https://user-images.githubusercontent.com/5213906/77502233-40871b00-6e95-11ea-8ac9-4844d7067ed2.png)
+<img width="600" alt="Screen Shot 2020-03-25 at 12 36 03 PM" src="https://user-images.githubusercontent.com/5213906/77502233-40871b00-6e95-11ea-8ac9-4844d7067ed2.png">
 
 </div>
 

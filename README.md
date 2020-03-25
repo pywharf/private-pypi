@@ -85,38 +85,38 @@ FLAGS
     --config (Optional[str]):
         Path to the package repository config (TOML),
         or the file content if --config_or_admin_secret_can_be_text is set.
-        Defaults to None.
+        Default to None.
     --admin_secret (Optional[str]):
         Path to the admin secrets config (TOML) with read/write permission.
         or the file content if --config_or_admin_secret_can_be_text is set.
         This field is required for local index synchronization.
-        Defaults to None.
+        Default to None.
     --config_or_admin_secret_can_be_text (Optional[bool]):
         Enable passing the file content to --config or --admin_secret.
-        Defaults to False.
+        Default to False.
     --auth_read_expires (int):
         The expiration time (in seconds) for read authentication.
-        Defaults to 3600.
+        Default to 3600.
     --auth_write_expires (int):
         The expiration time (in seconds) for write authentication.
-        Defaults to 300.
+        Default to 300.
     --extra_index_url (str):
         Extra index url for redirection in case package not found.
         If set to empty string explicitly redirection will be suppressed.
-        Defaults to 'https://pypi.org/simple/'.
+        Default to 'https://pypi.org/simple/'.
     --debug (bool):
         Enable debug mode.
-        Defaults to False.
+        Default to False.
     --host (str):
         The interface to bind to.
-        Defaults to '0.0.0.0'.
+        Default to '0.0.0.0'.
     --port (int):
         The port to bind to.
-        Defaults to 8888.
+        Default to 8888.
     **waitress_options (Dict[str, Any]):
         Optional arguments that `waitress.serve` takes.
         Details in https://docs.pylonsproject.org/projects/waitress/en/stable/arguments.html.
-        Defaults to {}.
+        Default to {}.
 ```
 
 In short, the configuration passed to `--config` defines mappings from `pkg_repo_name` to backend-specific settings. In other words, a single server instance can be configured to connect to multiple backends.
@@ -191,7 +191,7 @@ $ curl \
 Index file is used to track all published packages in a specific time:
 
 * *Remote index file*: the index file sotred in the backend. By design, this file is only updated by a standalone `update index` service and will not be updated by the `private-pypi` server.
-* *Local index file*: the index file synchronized from the remote index file by the `private-pypi` server 
+* *Local index file*: the index file synchronized from the remote index file by the `private-pypi` server
 
 To update the remote index file, use the command `private_pypi update_index`:
 
@@ -246,5 +246,42 @@ The format:
 
 ### GitHub
 
+#### Introduction
+
+`private-pypi` provides tools to help you setup a new GitHub repository to host your package. You package will be published as repository release and secured by personal access token. Take https://github.com/private-pypi/private-pypi-pkg-repo and https://private-pypi.github.io/private-pypi-pkg-repo/ as an example.
+
+#### Configuration and secret
+
+Package repository configuration:
+
+- `type`: must set to `github`.
+- `owner`: repository owner.
+- `repo`: repository name.
+- `branch` (optional): the branch to store the remote index file. Default to `master`.
+- `index_filename` (optional): the name of remote index file. Default to `index.toml`.
+- `max_file_bytes` (optional): limit the maximum size (in bytes) of package. Default to `2147483647` since *each file included in a release must be under 2 GB*, [as restricted by GitHub](https://help.github.com/en/github/administering-a-repository/about-releases#storage-and-bandwidth-quotas) .
+- `sync_index_interval` (optional): the time interval (in seconds) to perform local index file synchronization. Default to `60`.
+
+Example configuration of https://github.com/private-pypi/private-pypi-pkg-repo:
+
+```toml
+[private-pypi-pkg-repo]
+type = "github"
+owner = "private-pypi"
+repo = "private-pypi-pkg-repo"
+```
+
+
+
+#### Initialize the package repository
+
+#### GitHub workflow integration
+
 ### File system
+
+#### Introduction
+
+#### Configuration and secret
+
+#### Initialize the package repository
 

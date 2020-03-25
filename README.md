@@ -23,11 +23,7 @@ Supported backends:
 
 ## Design
 
-<div align="center">
-
-![](https://user-images.githubusercontent.com/5213906/77424853-c14e0480-6e0c-11ea-9a7f-879a68ada0a0.png)
-
-</div>
+<div align="center"><img width="766" alt="Screen Shot 2020-03-24 at 8 19 12 PM" src="https://user-images.githubusercontent.com/5213906/77424853-c14e0480-6e0c-11ea-9a7f-879a68ada0a0.png"></div>
 
 The `private-pypi` server serves as an abstraction layer between Python package management tools (pip/poetry/twine) and the storage backends:
 
@@ -76,7 +72,7 @@ SUPPORTED COMMANDS
 
 To run the server, use the command `private_pypi server`.
 
-```txt
+```shell
 SYNOPSIS
     private_pypi server ROOT <flags>
 
@@ -146,11 +142,8 @@ You need to visit `/login` page to submit `pkg_repo_name` and the secret, since 
 
 Example: `http://localhost:8888/login/`
 
-<div align="center">
+<div align="center"><img width="600" alt="Screen Shot 2020-03-25 at 12 36 03 PM" src="https://user-images.githubusercontent.com/5213906/77502233-40871b00-6e95-11ea-8ac9-4844d7067ed2.png"></div>
 
-<img width="600" alt="Screen Shot 2020-03-25 at 12 36 03 PM" src="https://user-images.githubusercontent.com/5213906/77502233-40871b00-6e95-11ea-8ac9-4844d7067ed2.png">
-
-</div>
 
 #### PEP-503, Legacy API
 
@@ -158,7 +151,7 @@ The server follows [PEP 503 -- Simple Repository API](https://www.python.org/dev
 
 * `GET /simple/`: List all distributions.
 * `GET /simple/<distrib>/`: List all packages in a distribution.
-* `GET /simple/<distrib>/<filename>`: Download a package file. 
+* `GET /simple/<distrib>/<filename>`: Download a package file.
 * `POST /simple/`: Upload a package file.
 
 In a nutshell, you need to set the "index url / repository url / ..." to `http://<host>:<port>/simple/` for the package management tool.
@@ -176,7 +169,7 @@ $ curl http://debug:foo@localhost:8888/index_mtime/
 
 ##### `POST /initialize`
 
-Submit configuration and (re-)initialize the server. WIth this API, user can change the package repository configuration on-the-fly.
+Submit configuration and (re-)initialize the server. User can change the package repository configuration on-the-fly with this API.
 
 ```shell
 # POST the file content.
@@ -191,8 +184,61 @@ $ curl \
   http://localhost:8888/initialize/
 ```
 
+### Update index
+
+<div align="center"><img width="636" alt="Screen Shot 2020-03-25 at 5 39 19 PM" src="https://user-images.githubusercontent.com/5213906/77522697-9a043f80-6ebf-11ea-95e6-9a086db7af2e.png"></div>
+
+Index file is used to track all published packages in a specific time:
+
+* *Remote index file*: the index file sotred in the backend. By design, this file is only updated by a standalone `update index` service and will not be updated by the `private-pypi` server.
+* *Local index file*: the index file synchronized by the `private-pypi` server from the remote index file.
+
+To update the remote index file, use the command `private_pypi update_index`:
+
+```shell
+SYNOPSIS
+    private_pypi update_index TYPE NAME <flags>
+
+POSITIONAL ARGUMENTS
+    TYPE (str):
+        Backend type.
+    NAME (str):
+        Name of config.
+
+FLAGS
+    --secret (Optional[str]):
+        The secret with write permission.
+    --secret_env (Optional[str]):
+        Instead of passing the secret through --secret,
+        the secret could be loaded from the environment variable.
+    **pkg_repo_configs (Dict[str, Any]):
+        Any other backend-specific configs are allowed.
+```
+
+Backend developer could setup an `update index` service on top of the  `private_pypi update_index` command invocation.
+
+### Backend-specific commands
+
+The backend registration mechanism will hook up the backend-specific commands to `private_pypi`. As illustrated, commands `github.init_pkg_repo` and `github.gen_gh_pages` are registered by `github` backend.
+
+```shell
+$ private_pypi --help
+SYNOPSIS
+    private_pypi <command> <command_flags>
+
+SUPPORTED COMMANDS
+    server
+    update_index
+    github.init_pkg_repo
+    github.gen_gh_pages
+```
+
+
+### Environment mode
+
 ## Backends
 
 ### GitHub
 
 ### File system
+

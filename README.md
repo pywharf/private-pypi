@@ -72,7 +72,7 @@ SUPPORTED COMMANDS
 
 To run the server, use the command `private_pypi server`.
 
-```shell
+```txt
 SYNOPSIS
     private_pypi server ROOT <flags>
 
@@ -222,7 +222,7 @@ Index file is used to track all published packages in a specific time:
 
 To update the remote index file, use the command `private_pypi update_index`:
 
-```shell
+```txt
 SYNOPSIS
     private_pypi update_index TYPE NAME <flags>
 

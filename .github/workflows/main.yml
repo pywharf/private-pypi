@@ -35,7 +35,7 @@ jobs:
 
   publish:
     needs: [ci]
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     services:

@@ -14,6 +14,7 @@ ARG PYWHARF_SERVER_PORT
 ADD dist /dist
 RUN PIP_INDEX_URL="http://${PYWHARF_PKG_REPO_NAME}:$(curl http://localhost:9999/get/${PYWHARF_PKG_REPO_TOKEN_NAME})@localhost:${PYWHARF_SERVER_PORT}/simple" \
     /venv/bin/pip install --disable-pip-version-check $(realpath /dist/pywharf*.whl | head -n 1)
+RUN ls -alh /venv/bin/
 
 
 FROM gcr.io/distroless/python3-debian10

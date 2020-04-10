@@ -40,8 +40,8 @@ jobs:
 
     services:
       pywharf:
-        # image: pywharf/pywharf:0.2.0
-        image: pywharf/pywharf:debug1
+        image: pywharf/pywharf:0.2.0
+        # image: pywharf/pywharf:debug1
         ports:
           - 8888:8888
         volumes:

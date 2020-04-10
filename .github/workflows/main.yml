@@ -35,7 +35,7 @@ jobs:
 
   publish:
     needs: [ci]
-    # if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     services:
@@ -107,7 +107,7 @@ jobs:
       - name: Docker build & publish.
         run: |
           # PYWHARF_VERSION=$(ls dist | python -c 'print(input().split("-")[1])')
-          PYWHARF_VERSION=debug
+          PYWHARF_VERSION=debug1
           PYWHARF_IMAGE=pywharf/pywharf:$PYWHARF_VERSION
 
           if DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect $PYWHARF_IMAGE > /dev/null; then

@@ -102,7 +102,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
 
       - name: Save PYWHARF_PKG_REPO_TOKEN to echo.
-        run: curl -X POST --data '{{ secrets.PYWHARF_PKG_REPO_TOKEN }}' http://localhost:9999/set/pywharf-pkg-repo-token
+        run: curl -X POST --data '${{ secrets.PYWHARF_PKG_REPO_TOKEN }}' http://localhost:9999/set/pywharf-pkg-repo-token
 
       - name: Docker build & publish.
         run: |

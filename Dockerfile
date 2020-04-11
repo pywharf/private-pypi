@@ -19,4 +19,5 @@ RUN ls -alh /venv/bin/
 
 FROM gcr.io/distroless/python3-debian10
 COPY --from=build-venv /venv /venv
-ENTRYPOINT ["/venv/bin/pywharf"]
+ENV PATH /venv/bin:$PATH
+ENTRYPOINT ["pywharf"]
